@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Панель администратора</title>
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+<h1>Панель администратора</h1>
+
+<section>
+    <h2>Пользователи</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Логин</th>
+            <th>Роль</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.role.name}"></td>
+            <td>
+                <form th:action="@{/admin/user/delete/{id}(id=${user.id})}" method="post">
+                    <button type="submit">Удалить</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h2>Добавить тур</h2>
+    <form th:action="@{/admin/tour/add}" method="post">
+        <label>Название: <input type="text" name="name" /></label><br/>
+        <label>Описание: <input type="text" name="description" /></label><br/>
+        <label>Цена: <input type="number" step="0.01" name="price" /></label><br/>
+        <label>Дата начала: <input type="date" name="startDate" /></label><br/>
+        <label>Дата окончания: <input type="date" name="endDate" /></label><br/>
+        <button type="submit">Добавить</button>
+    </form>
+</section>
+
+<section>
+    <h2>Список туров</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Название</th>
+            <th>Цена</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="tour : ${tours}">
+            <td th:text="${tour.id}"></td>
+            <td th:text="${tour.name}"></td>
+            <td th:text="${tour.price}"></td>
+            <td>
+                <form th:action="@{/admin/tour/delete/{id}(id=${tour.id})}" method="post">
+                    <button type="submit">Удалить</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+</body>
+</html>

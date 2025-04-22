@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Доступные туры</title>
+  <link rel="stylesheet" href="/css/main.css" type="text/css">
+</head>
+<body>
+
+<div class="header">
+  <div class="nav-buttons">
+    <a th:href="@{/}" class="btn">Главная страница</a>
+    <a th:href="@{/tours}" class="btn active">Смотреть доступные туры</a>
+    <a th:href="@{/about}" class="btn">Об авторе</a>
+
+    <!-- Показываем, если пользователь НЕ вошёл -->
+    <a th:href="@{/login}" class="btn" sec:authorize="isAnonymous()">Войти</a>
+    <a th:href="@{/register}" class="btn" sec:authorize="isAnonymous()">Зарегистрироваться</a>
+
+    <!-- Показываем, если пользователь ВОШЁЛ -->
+    <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="display:inline;">
+      <button type="submit" class="btn">Выйти</button>
+    </form>
+  </div>
+</div>
+
+<div class="main-content-tours">
+  <div class="tours-container">
+    <h1>Список доступных туров</h1>
+
+    <form method="get" th:action="@{/tours}" class="filter-form">
+      <div class="filter-row">
+        <div class="form-group">
+          <label>Страна:</label>
+          <input type="text" name="country" placeholder="Например: Россия" class="form-input">
+        </div>
+
+        <div class="form-group">
+          <label>Тип тура:</label>
+          <select name="type" class="form-input">
+            <option value="">Любой тип</option>
+            <option value="пляжный">Пляжный</option>
+            <option value="экскурсионный">Экскурсионный</option>
+            <option value="приключенческий">Приключенческий</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="filter-row">
+        <div class="form-group date-range">
+          <label>Дата начала:</label>
+          <div class="range-inputs">
+            <input type="date" name="startFrom" class="form-input">
+            <span class="range-separator">по</span>
+            <input type="date" name="startTo" class="form-input">
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-row">
+        <div class="form-group price-range">
+          <label>Цена:</label>
+          <div class="range-inputs">
+            <input type="number" name="priceFrom" min="0" placeholder="От" class="form-input">
+            <span class="range-separator">до</span>
+            <input type="number" name="priceTo" min="0" placeholder="До" class="form-input">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Сортировка:</label>
+          <select name="sort" class="form-input">
+            <option value="">Без сортировки</option>
+            <option value="price">По цене (дешевые сначала)</option>
+            <option value="price,desc">По цене (дорогие сначала)</option>
+            <option value="startDate">По дате (ранние сначала)</option>
+            <option value="startDate,desc">По дате (поздние сначала)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="filter-actions">
+        <button type="submit" class="btn btn-primary">Применить фильтры</button>
+        <button type="reset" class="btn btn-secondary">Сбросить</button>
+      </div>
+    </form>
+
+    <div class="tours-table-container">
+      <table class="tours-table">
+        <thead>
+        <tr>
+          <th>Название</th>
+          <th>Страна</th>
+          <th>Тип</th>
+          <th>Цена</th>
+          <th>Дата начала</th>
+          <th>Дата конца</th>
+          <th>Осталось мест</th>
+          <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="tour : ${tours}">
+          <td th:text="${tour.name}"></td>
+          <td th:text="${tour.country}"></td>
+          <td th:text="${tour.type}"></td>
+          <td th:text="${tour.price} + ' ₽'"></td>
+          <td th:text="${tour.startDate}"></td>
+          <td th:text="${tour.endDate}"></td>
+          <td th:text="${tour.stock}"></td>
+          <td>
+            <a th:href="@{'/tours/' + ${tour.id}}" class="btn btn-sm">
+              Подробнее
+            </a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${tour.name} + ' | Туристическое агентство'">Детали тура</title>
+  <link rel="stylesheet" href="/css/main.css" type="text/css">
+</head>
+<body>
+
+<div class="header">
+  <div class="nav-buttons">
+    <a th:href="@{/}" class="btn">Главная страница</a>
+    <a th:href="@{/tours}" class="btn">Смотреть доступные туры</a>
+    <a th:href="@{/about}" class="btn">Об авторе</a>
+
+    <!-- Показываем, если пользователь НЕ вошёл -->
+    <a th:href="@{/login}" class="btn" sec:authorize="isAnonymous()">Войти</a>
+    <a th:href="@{/register}" class="btn" sec:authorize="isAnonymous()">Зарегистрироваться</a>
+
+    <!-- Показываем, если пользователь ВОШЁЛ -->
+    <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="display:inline;">
+      <button type="submit" class="btn">Выйти</button>
+    </form>
+  </div>
+</div>
+
+<div class="main-content">
+  <div class="tour-details-container">
+    <div class="tour-header">
+      <h1 th:text="${tour.name}"></h1>
+    </div>
+
+    <div class="tour-gallery">
+      <img th:src="${tour.imageUrl}" alt="Фото тура" class="tour-main-image">
+    </div>
+
+    <div class="tour-info-grid">
+      <div class="info-item">
+        <span class="info-label">Цена:</span>
+        <span class="info-value" th:text="${tour.price} + ' ₽'"></span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Тип тура:</span>
+        <span class="info-value" th:text="${tour.type}"></span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Страна:</span>
+        <span class="info-value" th:text="${tour.country}"></span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Даты:</span>
+        <span class="info-value" th:text="${tour.startDate} + ' – ' + ${tour.endDate}"></span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Осталось мест:</span>
+        <span class="info-value" th:text="${tour.stock}"></span>
+      </div>
+    </div>
+
+    <div class="tour-description">
+      <h3>Описание тура</h3>
+      <p th:text="${tour.description}"></p>
+    </div>
+
+    <div class="tour-actions">
+      <button class="btn btn-primary btn-large">Забронировать тур</button>
+      <a th:href="@{/tours}" class="btn btn-secondary btn-large">Вернуться к списку туров</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
