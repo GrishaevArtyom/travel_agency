@@ -1,6 +1,5 @@
 package org.example.travel_agency.controller;
 
-import org.example.travel_agency.model.Role;
 import org.example.travel_agency.model.User;
 import org.example.travel_agency.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

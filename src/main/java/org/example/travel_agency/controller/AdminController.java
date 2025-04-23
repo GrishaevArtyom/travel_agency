@@ -26,6 +26,7 @@ public class AdminController {
     public String adminPanel(Model model) {
         model.addAttribute("users", userService.findAll());
         model.addAttribute("tours", tourService.findAll());
+        model.addAttribute("tour", new Tour());
         return "admin";
     }
 
@@ -41,9 +42,44 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @PostMapping("/tour/add")
-    public String addTour(@ModelAttribute Tour tour) {
-        tourService.save(tour);
+    @PostMapping("/user/update-role/{id}")
+    public String updateUserRole(@PathVariable Long id, @RequestParam String role) {
+        userService.updateUserRole(id, role);
         return "redirect:/admin";
     }
+
+    @GetMapping("/tour/edit/{id}")
+    public String editTour(@PathVariable Long id, Model model) {
+        Tour tour = tourService.findById(id);
+        model.addAttribute("tour", tour);
+        model.addAttribute("users", userService.findAll());
+        model.addAttribute("tours", tourService.findAll());
+        return "admin";
+    }
+
+    @PostMapping("/tour/save")
+    public String saveTour(@ModelAttribute Tour tour) {
+        if (tour.getId() != null && tourService.findById(tour.getId()) != null) {
+            // обновляем существующий
+            Tour existing = tourService.findById(tour.getId());
+            existing.setName(tour.getName());
+            existing.setCountry(tour.getCountry());
+            existing.setType(tour.getType());
+            existing.setPrice(tour.getPrice());
+            existing.setStartDate(tour.getStartDate());
+            existing.setEndDate(tour.getEndDate());
+            existing.setStock(tour.getStock());
+            existing.setDescription(tour.getDescription());
+            existing.setImageUrl(tour.getImageUrl());
+            tourService.save(existing);
+        } else {
+            // новый тур
+            tour.setId(null); // на всякий случай, чтобы точно не дублировался
+            tourService.save(tour);
+        }
+        return "redirect:/admin";
+    }
+
+
+
 }

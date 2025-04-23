@@ -5,71 +5,93 @@
 <head>
   <meta charset="UTF-8">
   <title th:text="${tour.name} + ' | Туристическое агентство'">Детали тура</title>
-  <link rel="stylesheet" href="/css/main.css" type="text/css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 
-<div class="header">
-  <div class="nav-buttons">
-    <a th:href="@{/}" class="btn">Главная страница</a>
-    <a th:href="@{/tours}" class="btn">Смотреть доступные туры</a>
-    <a th:href="@{/about}" class="btn">Об авторе</a>
+<!-- Верхняя панель -->
+<div class="bg-light shadow-sm py-3">
+  <div class="container d-flex justify-content-center flex-wrap gap-3">
+    <a th:href="@{/}" class="btn btn-primary">Главная страница</a>
+    <a th:href="@{/tours}" class="btn btn-primary">Смотреть доступные туры</a>
+    <a th:href="@{/about}" class="btn btn-primary">Об авторе</a>
 
     <!-- Показываем, если пользователь НЕ вошёл -->
-    <a th:href="@{/login}" class="btn" sec:authorize="isAnonymous()">Войти</a>
-    <a th:href="@{/register}" class="btn" sec:authorize="isAnonymous()">Зарегистрироваться</a>
+    <a th:href="@{/login}" class="btn btn-secondary" sec:authorize="isAnonymous()">Войти</a>
+    <a th:href="@{/register}" class="btn btn-secondary" sec:authorize="isAnonymous()">Зарегистрироваться</a>
 
     <!-- Показываем, если пользователь ВОШЁЛ -->
-    <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="display:inline;">
-      <button type="submit" class="btn">Выйти</button>
+    <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" class="d-inline">
+      <button type="submit" class="btn btn-danger">Выйти</button>
     </form>
   </div>
 </div>
 
-<div class="main-content">
-  <div class="tour-details-container">
-    <div class="tour-header">
-      <h1 th:text="${tour.name}"></h1>
-    </div>
+<!-- Основной контент -->
+<div class="container my-5">
+  <div class="row">
+    <div class="col-lg-8 mx-auto">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <!-- Заголовок -->
+          <h1 class="card-title text-center mb-4" th:text="${tour.name}">Название тура</h1>
 
-    <div class="tour-gallery">
-      <img th:src="${tour.imageUrl}" alt="Фото тура" class="tour-main-image">
-    </div>
+          <!-- Галерея -->
+          <div class="mb-4">
+            <img th:src="${tour.imageUrl}" alt="Фото тура" class="img-fluid rounded shadow-sm">
+          </div>
 
-    <div class="tour-info-grid">
-      <div class="info-item">
-        <span class="info-label">Цена:</span>
-        <span class="info-value" th:text="${tour.price} + ' ₽'"></span>
-      </div>
-      <div class="info-item">
-        <span class="info-label">Тип тура:</span>
-        <span class="info-value" th:text="${tour.type}"></span>
-      </div>
-      <div class="info-item">
-        <span class="info-label">Страна:</span>
-        <span class="info-value" th:text="${tour.country}"></span>
-      </div>
-      <div class="info-item">
-        <span class="info-label">Даты:</span>
-        <span class="info-value" th:text="${tour.startDate} + ' – ' + ${tour.endDate}"></span>
-      </div>
-      <div class="info-item">
-        <span class="info-label">Осталось мест:</span>
-        <span class="info-value" th:text="${tour.stock}"></span>
-      </div>
-    </div>
+          <!-- Информация о туре -->
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <div class="border p-3 rounded">
+                <h6 class="text-muted">Цена</h6>
+                <p class="fw-bold text-success fs-5" th:text="${tour.price} + ' ₽'">Цена</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="border p-3 rounded">
+                <h6 class="text-muted">Тип тура</h6>
+                <p class="fw-bold" th:text="${tour.type}">Тип</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="border p-3 rounded">
+                <h6 class="text-muted">Страна</h6>
+                <p class="fw-bold" th:text="${tour.country}">Страна</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="border p-3 rounded">
+                <h6 class="text-muted">Даты</h6>
+                <p class="fw-bold" th:text="${tour.startDate} + ' – ' + ${tour.endDate}">Даты</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="border p-3 rounded">
+                <h6 class="text-muted">Осталось мест</h6>
+                <p class="fw-bold" th:text="${tour.stock}">Места</p>
+              </div>
+            </div>
+          </div>
 
-    <div class="tour-description">
-      <h3>Описание тура</h3>
-      <p th:text="${tour.description}"></p>
-    </div>
+          <!-- Описание -->
+          <div class="mb-4">
+            <h3 class="text-primary">Описание тура</h3>
+            <p th:text="${tour.description}" class="text-muted">Описание</p>
+          </div>
 
-    <div class="tour-actions">
-      <button class="btn btn-primary btn-large">Забронировать тур</button>
-      <a th:href="@{/tours}" class="btn btn-secondary btn-large">Вернуться к списку туров</a>
+          <!-- Действия -->
+          <div class="d-flex justify-content-center gap-3">
+            <button class="btn btn-primary btn-lg">Забронировать тур</button>
+            <a th:href="@{/tours}" class="btn btn-secondary btn-lg">Вернуться к списку туров</a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
