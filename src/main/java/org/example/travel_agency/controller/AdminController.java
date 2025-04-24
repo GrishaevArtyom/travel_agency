@@ -68,7 +68,6 @@ public class AdminController {
             existing.setPrice(tour.getPrice());
             existing.setStartDate(tour.getStartDate());
             existing.setEndDate(tour.getEndDate());
-            existing.setStock(tour.getStock());
             existing.setDescription(tour.getDescription());
             existing.setImageUrl(tour.getImageUrl());
             tourService.save(existing);

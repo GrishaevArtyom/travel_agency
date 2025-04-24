@@ -19,6 +19,9 @@
         <a th:href="@{/login}" class="btn btn-secondary" sec:authorize="isAnonymous()">Войти</a>
         <a th:href="@{/register}" class="btn btn-secondary" sec:authorize="isAnonymous()">Зарегистрироваться</a>
 
+        <!-- Кнопка для пользователей с ролью admin -->
+        <a th:href="@{/admin}" class="btn btn-warning" sec:authorize="hasRole('ADMIN')">Панель администратора</a>
+
         <!-- Показываем, если пользователь ВОШЁЛ -->
         <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" class="d-inline">
             <button type="submit" class="btn btn-danger">Выйти</button>

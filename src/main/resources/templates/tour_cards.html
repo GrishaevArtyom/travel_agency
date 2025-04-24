@@ -84,29 +84,6 @@
             <button type="reset" class="btn btn-secondary">Сбросить</button>
         </div>
     </form>
-
-    <!-- Список туров -->
-    <div class="row g-4">
-        <div class="col-md-4" th:each="tour : ${tours}">
-            <div class="card shadow-sm h-100">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title" th:text="${tour.name}">Название тура</h5>
-                    <p class="card-text text-muted mb-2">
-                        <span th:text="'Страна: ' + ${tour.country}">Страна</span><br>
-                        <span th:text="'Тип: ' + ${tour.type}">Тип</span>
-                    </p>
-                    <p class="card-text text-success fw-bold" th:text="${tour.price} + ' ₽'">Цена</p>
-                    <p class="card-text">
-                        <span th:text="'Дата начала: ' + ${tour.startDate}">Дата начала</span><br>
-                        <span th:text="'Дата конца: ' + ${tour.endDate}">Дата конца</span>
-                    </p>
-                    <div class="mt-auto">
-                        <a th:href="@{'/tours/' + ${tour.id}}" class="btn btn-primary w-100">Подробнее</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
