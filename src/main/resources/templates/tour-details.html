@@ -16,11 +16,13 @@
     <a th:href="@{/tours}" class="btn btn-primary">Смотреть доступные туры</a>
     <a th:href="@{/about}" class="btn btn-primary">Об авторе</a>
 
-    <!-- Показываем, если пользователь НЕ вошёл -->
+    <a th:href="@{/profile}" class="btn btn-success" sec:authorize="hasRole('USER')">Личный кабинет </a>
+
+    <a th:href="@{/admin}" class="btn btn-warning" sec:authorize="hasRole('ADMIN')">Панель администратора</a>
+
     <a th:href="@{/login}" class="btn btn-secondary" sec:authorize="isAnonymous()">Войти</a>
     <a th:href="@{/register}" class="btn btn-secondary" sec:authorize="isAnonymous()">Зарегистрироваться</a>
 
-    <!-- Показываем, если пользователь ВОШЁЛ -->
     <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" class="d-inline">
       <button type="submit" class="btn btn-danger">Выйти</button>
     </form>
@@ -77,7 +79,9 @@
 
           <!-- Действия -->
           <div class="d-flex justify-content-center gap-3">
-            <button class="btn btn-primary btn-lg">Забронировать тур</button>
+            <form th:action="@{/booking/{id}(id=${tour.id})}" method="post">
+              <button type="submit" class="btn btn-success btn-lg">Забронировать тур</button>
+            </form>
             <a th:href="@{/tours}" class="btn btn-secondary btn-lg">Вернуться к списку туров</a>
           </div>
         </div>
