@@ -4,41 +4,66 @@
       lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Об авторе</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 </head>
 <body class="d-flex flex-column min-vh-100">
 
-<div class="bg-light shadow-sm py-3">
-    <div class="container d-flex justify-content-center flex-wrap gap-3">
-        <a th:href="@{/}" class="btn btn-primary">Главная страница</a>
-        <a th:href="@{/tours}" class="btn btn-primary">Смотреть доступные туры</a>
-        <a th:href="@{/about}" class="btn btn-primary active">Об авторе</a>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top py-3">
+    <div class="container">
+        <a class="navbar-brand fw-bold">Туристическое агентство</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-        <a th:href="@{/profile}" class="btn btn-success" sec:authorize="hasRole('USER')">Личный кабинет </a>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <div class="navbar-nav gap-2 align-items-center">
 
-        <a th:href="@{/admin}" class="btn btn-warning" sec:authorize="hasRole('ADMIN')">Панель администратора</a>
+                <a th:href="@{/}" class="btn btn-outline-primary btn-sm">Главная</a>
+                <a th:href="@{/tours}" class="btn btn-outline-primary btn-sm">Туры</a>
+                <a th:href="@{/about}" class="btn btn-primary btn-sm active">О нас</a>
 
-        <a th:href="@{/login}" class="btn btn-secondary" sec:authorize="isAnonymous()">Войти</a>
-        <a th:href="@{/register}" class="btn btn-secondary" sec:authorize="isAnonymous()">Зарегистрироваться</a>
+                <!-- Profile -->
+                <a th:href="@{/profile}" sec:authorize="hasRole('USER')" class="btn btn-success btn-sm ms-2">
+                    <i class="bi bi-person-circle"></i> Личный кабинет
+                </a>
 
-        <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" class="d-inline">
-            <button type="submit" class="btn btn-danger">Выйти</button>
-        </form>
+                <!-- Admin -->
+                <a th:href="@{/admin}" sec:authorize="hasRole('ADMIN')" class="btn btn-warning btn-sm text-white ms-2">
+                    <i class="bi bi-shield-lock"></i> Админ
+                </a>
+
+                <!-- Auth Buttons -->
+                <a th:href="@{/login}" sec:authorize="isAnonymous()" class="btn btn-outline-secondary btn-sm ms-2">Войти</a>
+                <a th:href="@{/register}" sec:authorize="isAnonymous()" class="btn btn-secondary btn-sm ms-2">Регистрация</a>
+
+                <!-- Logout -->
+                <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" class="ms-2">
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <i class="bi bi-box-arrow-right"></i> Выйти
+                    </button>
+                </form>
+
+            </div>
+        </div>
     </div>
-</div>
+</nav>
 
+<!-- Main Content -->
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h1 class="card-title text-center mb-4">Об авторе</h1>
-                    <p class="card-text fs-5 text-muted text-center">
-                        <span class="fw-bold">Привет! 👋 Меня зовут Артём.</span><br>
+            <div class="card shadow-sm mb-4">
+                <div class="card-body text-center">
+                    <h1 class="card-title mb-4">Об авторе</h1>
+                    <p class="fs-5 text-muted">
+                        <strong>Привет! 👋 Меня зовут Артём.</strong><br>
                         Я студент 2 курса, и это моя курсовая работа по разработке веб-приложения с использованием Java Spring Boot.
                     </p>
-                    <p class="card-text fs-5 text-muted text-center">
+                    <p class="fs-5 text-muted">
                         Цель проекта — создание информационно-справочной системы туристического агентства.
                     </p>
                 </div>
@@ -46,17 +71,15 @@
         </div>
     </div>
 
-    <div class="row justify-content-center mt-5">
+    <div class="row justify-content-center">
         <div class="col-lg-6">
-            <div class="card bg-light shadow-sm">
+            <div class="card shadow-sm">
                 <div class="card-body">
-                    <h2 class="card-title text-primary text-center">Контакты</h2>
+                    <h2 class="text-primary text-center mb-4">Контакты</h2>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <span class="me-2">✉️</span> Email: <a href="mailto:artem@example.com" class="text-decoration-none">artem@example.com</a>
-                        </li>
-                        <li class="list-group-item">
-                            <span class="me-2">🔗</span> GitHub: <a href="https://github.com/GrishaevArtyom" target="_blank" class="text-decoration-none">GrishaevArtyom</a>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>✉️ Email:</span>
+                            <a href="mailto:233552@edu.fa.ru" class="text-decoration-none">233552@edu.fa.ru</a>
                         </li>
                     </ul>
                 </div>

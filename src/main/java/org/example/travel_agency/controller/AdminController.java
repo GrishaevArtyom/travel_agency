@@ -1,7 +1,6 @@
 package org.example.travel_agency.controller;
 
 import org.example.travel_agency.model.Tour;
-import org.example.travel_agency.model.User;
 import org.example.travel_agency.service.TourService;
 import org.example.travel_agency.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,45 +21,56 @@ public class AdminController {
         this.tourService = tourService;
     }
 
+    // Стартовая страница админки с кнопками управления
     @GetMapping
-    public String adminPanel(Model model) {
+    public String adminPanel() {
+        return "admin"; // только кнопки "Управление пользователями", "Редактирование туров"
+    }
+
+    // Управление пользователями
+    @GetMapping("/users")
+    public String manageUsers(Model model) {
         model.addAttribute("users", userService.findAll());
-        model.addAttribute("tours", tourService.findAll());
-        model.addAttribute("tour", new Tour());
-        return "admin";
+        return "admin-users";
     }
 
     @PostMapping("/user/delete/{id}")
     public String deleteUser(@PathVariable Long id) {
         userService.deleteById(id);
-        return "redirect:/admin";
-    }
-
-    @PostMapping("/tour/delete/{id}")
-    public String deleteTour(@PathVariable Long id) {
-        tourService.deleteById(id);
-        return "redirect:/admin";
+        return "redirect:/admin/users";
     }
 
     @PostMapping("/user/update-role/{id}")
     public String updateUserRole(@PathVariable Long id, @RequestParam String role) {
         userService.updateUserRole(id, role);
-        return "redirect:/admin";
+        return "redirect:/admin/users";
+    }
+
+    // Управление турами
+    @GetMapping("/tours")
+    public String manageTours(Model model) {
+        model.addAttribute("tours", tourService.findAll());
+        model.addAttribute("tour", new Tour()); // для формы добавления
+        return "admin-tours";
+    }
+
+    @PostMapping("/tour/delete/{id}")
+    public String deleteTour(@PathVariable Long id) {
+        tourService.deleteById(id);
+        return "redirect:/admin/tours";
     }
 
     @GetMapping("/tour/edit/{id}")
     public String editTour(@PathVariable Long id, Model model) {
         Tour tour = tourService.findById(id);
         model.addAttribute("tour", tour);
-        model.addAttribute("users", userService.findAll());
         model.addAttribute("tours", tourService.findAll());
-        return "admin";
+        return "admin-tours"; // редактирование тура также на admin-tours.html
     }
 
     @PostMapping("/tour/save")
     public String saveTour(@ModelAttribute Tour tour) {
         if (tour.getId() != null && tourService.findById(tour.getId()) != null) {
-            // обновляем существующий
             Tour existing = tourService.findById(tour.getId());
             existing.setName(tour.getName());
             existing.setCountry(tour.getCountry());
@@ -72,13 +82,9 @@ public class AdminController {
             existing.setImageUrl(tour.getImageUrl());
             tourService.save(existing);
         } else {
-            // новый тур
-            tour.setId(null); // на всякий случай, чтобы точно не дублировался
+            tour.setId(null);
             tourService.save(tour);
         }
-        return "redirect:/admin";
+        return "redirect:/admin/tours";
     }
-
-
-
 }

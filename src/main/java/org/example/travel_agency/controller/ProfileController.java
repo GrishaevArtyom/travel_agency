@@ -28,17 +28,16 @@ public class ProfileController {
     @GetMapping
     public String userProfile(Model model, Principal principal) {
         User user = userService.findUserByUsername(principal.getName());
-        List<Booking> bookings = bookingService.getBookingsForUser(user);
+        List<Booking> bookings = bookingService.getBookingsByUsername(user.getUsername());
         model.addAttribute("bookings", bookings);
         return "profile";
     }
 
     @PostMapping("/cancel/{id}")
     public String cancelBooking(@PathVariable Long id, Principal principal) {
-        User user = userService.findUserByUsername(principal.getName());
         Booking booking = bookingService.findById(id);
 
-        if (booking != null && booking.getUser().getId().equals(user.getId())) {
+        if (booking != null && booking.getUsername().equals(principal.getName())) {
             bookingService.deleteBooking(id);
         }
 

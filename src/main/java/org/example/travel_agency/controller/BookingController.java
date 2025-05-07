@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDateTime;
 
@@ -36,8 +38,17 @@ public class BookingController {
         Tour tour = tourService.findById(tourId);
 
         Booking booking = Booking.builder()
-                .user(user)
-                .tour(tour)
+                .userId(user.getId())
+                .username(user.getUsername())
+                .tourId(tour.getId())
+                .tourName(tour.getName())
+                .country(tour.getCountry())
+                .type(tour.getType())
+                .price(tour.getPrice())
+                .startDate(tour.getStartDate())
+                .endDate(tour.getEndDate())
+                .imageUrl(tour.getImageUrl())
+                .description(tour.getDescription())
                 .bookingDate(LocalDateTime.now())
                 .build();
 

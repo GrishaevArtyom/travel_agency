@@ -41,6 +41,24 @@ public class HomeController {
 
         List<Tour> tours = tourService.getFilteredTours(country, type, startFrom, startTo, priceFrom, priceTo, sort);
         model.addAttribute("tours", tours);
+
+        model.addAttribute("tourCount", tours.size());
+
+        if (!tours.isEmpty()) {
+            BigDecimal minPrice = tours.stream()
+                    .map(Tour::getPrice)
+                    .min(BigDecimal::compareTo)
+                    .orElse(BigDecimal.ZERO);
+
+            BigDecimal maxPrice = tours.stream()
+                    .map(Tour::getPrice)
+                    .max(BigDecimal::compareTo)
+                    .orElse(BigDecimal.ZERO);
+
+            model.addAttribute("minPrice", minPrice);
+            model.addAttribute("maxPrice", maxPrice);
+        }
+
         return "tours";
     }
 
