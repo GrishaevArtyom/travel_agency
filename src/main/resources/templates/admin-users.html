@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,7 +24,7 @@
 
                 <a th:href="@{/}" class="btn btn-outline-primary btn-sm">Главная</a>
                 <a th:href="@{/tours}" class="btn btn-outline-primary btn-sm">Туры</a>
-                <a th:href="@{/about}" class="btn btn-outline-primary btn-sm">О нас</a>
+                <a th:href="@{/about}" class="btn btn-outline-primary btn-sm">Об авторе</a>
 
                 <!-- Profile -->
                 <a th:href="@{/profile}" sec:authorize="hasRole('USER')" class="btn btn-success btn-sm ms-2">

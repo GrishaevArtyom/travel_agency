@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,7 +24,7 @@
 
                 <a th:href="@{/}" class="btn btn-outline-primary btn-sm">Главная</a>
                 <a th:href="@{/tours}" class="btn btn-outline-primary btn-sm">Туры</a>
-                <a th:href="@{/about}" class="btn btn-outline-primary btn-sm">О нас</a>
+                <a th:href="@{/about}" class="btn btn-outline-primary btn-sm">Об авторе</a>
 
                 <!-- Profile -->
                 <a th:href="@{/profile}" sec:authorize="hasRole('USER')" class="btn btn-success btn-sm ms-2">
@@ -103,11 +105,11 @@
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Страна</label>
-                    <input type="text" name="country" th:value="${tour.country}" class="form-control"/>
+                    <input type="text" name="country" th:value="${tour.country}" class="form-control" required/>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Тип</label>
-                    <select name="type" class="form-select">
+                    <select name="type" class="form-select" required>
                         <option value="пляжный" th:selected="${tour.type == 'пляжный'}">Пляжный</option>
                         <option value="экскурсионный" th:selected="${tour.type == 'экскурсионный'}">Экскурсионный</option>
                         <option value="приключенческий" th:selected="${tour.type == 'приключенческий'}">Приключенческий</option>
@@ -115,23 +117,23 @@
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Цена</label>
-                    <input type="number" name="price" th:value="${tour.price}" class="form-control"/>
+                    <input type="number" name="price" th:value="${tour.price}" class="form-control" required/>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Дата начала</label>
-                    <input type="date" name="startDate" th:value="${tour.startDate}" class="form-control"/>
+                    <input type="date" name="startDate" th:value="${tour.startDate}" class="form-control" min="2020-01-01" max="2030-12-31" required/>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Дата окончания</label>
-                    <input type="date" name="endDate" th:value="${tour.endDate}" class="form-control"/>
+                    <input type="date" name="endDate" th:value="${tour.endDate}" class="form-control" min="2020-01-01" max="2030-12-31" required/>
                 </div>
                 <div class="col-md-8">
                     <label class="form-label">URL изображения</label>
-                    <input type="text" name="imageUrl" th:value="${tour.imageUrl}" class="form-control"/>
+                    <input type="text" name="imageUrl" th:value="${tour.imageUrl}" class="form-control" required/>
                 </div>
                 <div class="col-md-12">
                     <label class="form-label">Описание</label>
-                    <textarea name="description" th:text="${tour.description}" class="form-control" rows="3"></textarea>
+                    <textarea name="description" th:text="${tour.description}" class="form-control" rows="3" required></textarea>
                 </div>
                 <div class="col-12">
                     <button type="submit" class="btn btn-success">

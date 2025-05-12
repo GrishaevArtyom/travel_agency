@@ -24,7 +24,7 @@
 
                 <a th:href="@{/}" class="btn btn-outline-primary btn-sm">Главная</a>
                 <a th:href="@{/tours}" class="btn btn-primary btn-sm active">Туры</a>
-                <a th:href="@{/about}" class="btn btn-outline-primary btn-sm">О нас</a>
+                <a th:href="@{/about}" class="btn btn-outline-primary btn-sm">Об авторе</a>
 
                 <!-- Profile -->
                 <a th:href="@{/profile}" sec:authorize="hasRole('USER')" class="btn btn-success btn-sm ms-2">
@@ -54,7 +54,7 @@
 
 <!-- Main Content -->
 <div class="container my-5">
-    <h1 class="text-center mb-5 fw-bold">Доступные туры</h1>
+    <h1 class="text-center mb-5">Доступные туры</h1>
 
     <div class="alert alert-info d-flex justify-content-between align-items-center mb-4 px-4 py-3 shadow-sm"
          th:if="${tours != null and not #lists.isEmpty(tours)}">
@@ -100,11 +100,11 @@
                 <div class="row g-3 mt-3">
                     <div class="col-md-6">
                         <label for="startFrom" class="form-label">Дата начала:</label>
-                        <input type="date" id="startFrom" name="startFrom" class="form-control">
+                        <input type="date" id="startFrom" name="startFrom" class="form-control" min="2020-01-01" max="2030-12-31">
                     </div>
                     <div class="col-md-6">
                         <label for="startTo" class="form-label">Дата конца:</label>
-                        <input type="date" id="startTo" name="startTo" class="form-control">
+                        <input type="date" id="startTo" name="startTo" class="form-control" min="2020-01-01" max="2030-12-31">
                     </div>
                 </div>
                 <div class="row g-3 mt-3">

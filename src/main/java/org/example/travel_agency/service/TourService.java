@@ -78,12 +78,19 @@ public class TourService {
 
         query.select(tourRoot).where(predicates.toArray(new Predicate[0]));
 
-        // Сортировка
         if (sortField != null) {
-            if ("startDate".equals(sortField)) {
-                query.orderBy(cb.asc(tourRoot.get("startDate")));
-            } else if ("price".equals(sortField)) {
-                query.orderBy(cb.asc(tourRoot.get("price")));
+            if (sortField.startsWith("startDate")) {
+                if (sortField.endsWith(",desc")) {
+                    query.orderBy(cb.desc(tourRoot.get("startDate")));
+                } else {
+                    query.orderBy(cb.asc(tourRoot.get("startDate")));
+                }
+            } else if (sortField.startsWith("price")) {
+                if (sortField.endsWith(",desc")) {
+                    query.orderBy(cb.desc(tourRoot.get("price")));
+                } else {
+                    query.orderBy(cb.asc(tourRoot.get("price")));
+                }
             }
         }
 
