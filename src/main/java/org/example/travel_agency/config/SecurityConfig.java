@@ -16,7 +16,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/login", "/register", "/css/**")) // Игнорирование CSRF на этих путях
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/tours", "/tours/**", "/register", "/css/**", "/about").permitAll() // Главная страница доступна всем
+                        .requestMatchers("/", "/tours", "/tours/**", "/register", "/css/**", "/images/**", "js/**", "/about").permitAll() // Главная страница доступна всем
                         .requestMatchers("/admin/**").hasRole("ADMIN") // Только админ доступен к админ-панели
                         .anyRequest().authenticated() // Все остальные страницы требуют авторизации
                 )

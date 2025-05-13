@@ -47,7 +47,7 @@ public class BookingController {
                 .price(tour.getPrice())
                 .startDate(tour.getStartDate())
                 .endDate(tour.getEndDate())
-                .imageUrl(tour.getImageUrl())
+                .imagePath(tour.getImagePath())
                 .description(tour.getDescription())
                 .bookingDate(LocalDateTime.now())
                 .build();

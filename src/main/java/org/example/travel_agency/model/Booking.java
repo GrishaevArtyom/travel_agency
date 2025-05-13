@@ -33,7 +33,7 @@ public class Booking {
     private BigDecimal price;
     private LocalDate startDate;
     private LocalDate endDate;
-    private String imageUrl;
+    private String imagePath;
     private String description;
 
     @Column(nullable = false)

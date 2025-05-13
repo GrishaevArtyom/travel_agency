@@ -7,6 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 @Controller
 @RequestMapping("/admin")
@@ -69,7 +76,14 @@ public class AdminController {
     }
 
     @PostMapping("/tour/save")
-    public String saveTour(@ModelAttribute Tour tour) {
+    public String saveTour(@ModelAttribute Tour tour, @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
+        // Папка для сохранения изображений
+        String uploadDir = "uploads/";
+        String fileName = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
+        Path path = Paths.get(uploadDir + fileName);
+        Files.copy(imageFile.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+        tour.setImagePath("/uploads/" + fileName); // Сохраняем путь к изображению
+
         if (tour.getId() != null && tourService.findById(tour.getId()) != null) {
             Tour existing = tourService.findById(tour.getId());
             existing.setName(tour.getName());
@@ -79,7 +93,7 @@ public class AdminController {
             existing.setStartDate(tour.getStartDate());
             existing.setEndDate(tour.getEndDate());
             existing.setDescription(tour.getDescription());
-            existing.setImageUrl(tour.getImageUrl());
+            existing.setImagePath(tour.getImagePath()); // Обновляем изображение
             tourService.save(existing);
         } else {
             tour.setId(null);
