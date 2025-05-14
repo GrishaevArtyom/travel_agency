@@ -11,12 +11,28 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Реализация интерфейса UserDetailsService для аутентификации пользователей.
+ * Предоставляет метод для загрузки пользовательских данных из репозитория
+ * и преобразования их в формат, понятный Spring Security.
+ */
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+    /**
+     * Репозиторий для доступа к данным пользователей.
+     */
     private final UserRepository userRepository;
 
+    /**
+     * Загружает пользовательские данные по имени пользователя.
+     * Используется Spring Security для аутентификации пользователя.
+     *
+     * @param username имя пользователя, данные которого необходимо загрузить
+     * @return объект UserDetails с информацией о пользователе для Spring Security
+     * @throws UsernameNotFoundException если пользователь с указанным именем не найден
+     */
     @Override
     public UserDetails loadUserByUsername(String username) {
         User user = userRepository.findByUsername(username)
