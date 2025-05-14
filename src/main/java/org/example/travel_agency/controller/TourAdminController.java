@@ -2,7 +2,6 @@ package org.example.travel_agency.controller;
 
 import org.example.travel_agency.model.Tour;
 import org.example.travel_agency.service.TourService;
-import org.example.travel_agency.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,73 +15,44 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 @Controller
-@RequestMapping("/admin")
-public class AdminController {
+@RequestMapping("/admin/tours")
+public class TourAdminController {
 
-    private final UserService userService;
     private final TourService tourService;
 
     @Autowired
-    public AdminController(UserService userService, TourService tourService) {
-        this.userService = userService;
+    public TourAdminController(TourService tourService) {
         this.tourService = tourService;
     }
 
-    // Стартовая страница админки с кнопками управления
     @GetMapping
-    public String adminPanel() {
-        return "admin"; // только кнопки "Управление пользователями", "Редактирование туров"
-    }
-
-    // Управление пользователями
-    @GetMapping("/users")
-    public String manageUsers(Model model) {
-        model.addAttribute("users", userService.findAll());
-        return "admin-users";
-    }
-
-    @PostMapping("/user/delete/{id}")
-    public String deleteUser(@PathVariable Long id) {
-        userService.deleteById(id);
-        return "redirect:/admin/users";
-    }
-
-    @PostMapping("/user/update-role/{id}")
-    public String updateUserRole(@PathVariable Long id, @RequestParam String role) {
-        userService.updateUserRole(id, role);
-        return "redirect:/admin/users";
-    }
-
-    // Управление турами
-    @GetMapping("/tours")
     public String manageTours(Model model) {
         model.addAttribute("tours", tourService.findAll());
-        model.addAttribute("tour", new Tour()); // для формы добавления
+        model.addAttribute("tour", new Tour());
         return "admin-tours";
     }
 
-    @PostMapping("/tour/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String deleteTour(@PathVariable Long id) {
         tourService.deleteById(id);
         return "redirect:/admin/tours";
     }
 
-    @GetMapping("/tour/edit/{id}")
+    @GetMapping("/edit/{id}")
     public String editTour(@PathVariable Long id, Model model) {
         Tour tour = tourService.findById(id);
         model.addAttribute("tour", tour);
         model.addAttribute("tours", tourService.findAll());
-        return "admin-tours"; // редактирование тура также на admin-tours.html
+        return "admin-tours";
     }
 
-    @PostMapping("/tour/save")
+    @PostMapping("/save")
     public String saveTour(@ModelAttribute Tour tour, @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
-        // Папка для сохранения изображений
         String uploadDir = "uploads/";
         String fileName = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
         Path path = Paths.get(uploadDir + fileName);
         Files.copy(imageFile.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-        tour.setImagePath("/uploads/" + fileName); // Сохраняем путь к изображению
+        tour.setImagePath("/uploads/" + fileName);
 
         if (tour.getId() != null && tourService.findById(tour.getId()) != null) {
             Tour existing = tourService.findById(tour.getId());
@@ -93,7 +63,7 @@ public class AdminController {
             existing.setStartDate(tour.getStartDate());
             existing.setEndDate(tour.getEndDate());
             existing.setDescription(tour.getDescription());
-            existing.setImagePath(tour.getImagePath()); // Обновляем изображение
+            existing.setImagePath(tour.getImagePath());
             tourService.save(existing);
         } else {
             tour.setId(null);

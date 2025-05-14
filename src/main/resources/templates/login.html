@@ -1,21 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Вход в систему</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
 </head>
 <body class="d-flex flex-column min-vh-100">
-
-<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top py-3">
     <div class="container">
         <a class="navbar-brand fw-bold">Туристическое агентство</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <div class="navbar-nav gap-2 align-items-center">
                 <a th:href="@{/}" class="btn btn-outline-primary btn-sm">Главная</a>
@@ -26,29 +23,22 @@
         </div>
     </div>
 </nav>
-
-<!-- Main Content -->
 <div class="container my-5 flex-grow-1">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h1 class="text-center mb-4">Вход в систему</h1>
-
-                    <!-- Форма входа -->
                     <form th:action="@{/login}" method="post">
                         <div class="mb-3">
                             <label for="login-username" class="form-label">Имя пользователя:</label>
-                            <input type="text" id="login-username" name="username" required class="form-control">
+                            <input type="text" id="login-username" name="username" required class="form-control"/>
                         </div>
-
                         <div class="mb-3">
                             <label for="login-password" class="form-label">Пароль:</label>
-                            <input type="password" id="login-password" name="password" required class="form-control">
+                            <input type="password" id="login-password" name="password" required class="form-control"/>
                         </div>
-
                         <button type="submit" class="btn btn-primary w-100">Войти</button>
-
                         <div class="text-center mt-3">
                             Нет аккаунта?
                             <a th:href="@{/register}" class="text-decoration-none">Зарегистрироваться</a>
@@ -59,7 +49,6 @@
         </div>
     </div>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

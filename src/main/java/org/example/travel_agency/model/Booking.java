@@ -21,19 +21,37 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Информация о пользователе
+    @Column(nullable = false)
     private Long userId;
+
+    @Column(nullable = false)
     private String username;
 
-    // Полная информация о туре (без @ManyToOne)
+    @Column(nullable = false)
     private Long tourId;
+
+    @Column(nullable = false)
     private String tourName;
+
+    @Column(nullable = false)
     private String country;
+
+    @Column(nullable = false)
     private String type;
+
+    @Column(nullable = false)
     private BigDecimal price;
+
+    @Column(nullable = false)
     private LocalDate startDate;
+
+    @Column(nullable = false)
     private LocalDate endDate;
+
+    @Column(nullable = false)
     private String imagePath;
+
+    @Column(nullable = false)
     private String description;
 
     @Column(nullable = false)

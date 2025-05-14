@@ -22,8 +22,12 @@ public class TourService {
     @PersistenceContext
     private EntityManager entityManager;
 
+    private final TourRepository tourRepository;
+
     @Autowired
-    private TourRepository tourRepository;
+    public TourService(TourRepository tourRepository) {
+        this.tourRepository = tourRepository;
+    }
 
     public List<Tour> findAll() {
         return tourRepository.findAll();

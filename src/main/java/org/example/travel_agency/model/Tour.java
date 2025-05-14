@@ -39,7 +39,7 @@ public class Tour {
     private LocalDate endDate;
 
     @Column(nullable = false)
-    private String imagePath; // Путь к загруженному изображению
+    private String imagePath;
 
     @Column(nullable = false)
     private String description;

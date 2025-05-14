@@ -15,18 +15,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Controller
-public class HomeController {
+public class TourController {
 
     private final TourService tourService;
 
     @Autowired
-    public HomeController(TourService tourService) {
+    public TourController(TourService tourService) {
         this.tourService = tourService;
-    }
-
-    @GetMapping("/")
-    public String home() {
-        return "home";
     }
 
     @GetMapping("/tours")
@@ -62,19 +57,10 @@ public class HomeController {
         return "tours";
     }
 
-
     @GetMapping("/tours/{id}")
     public String tourDetails(@PathVariable Long id, Model model) {
-        var tour = tourService.findById(id);
-        if (tour == null) {
-            return "redirect:/tours"; // или страница 404
-        }
+        Tour tour = tourService.findById(id);
         model.addAttribute("tour", tour);
         return "tour-details";
-    }
-
-    @GetMapping("/about")
-    public String about() {
-        return "about";
     }
 }

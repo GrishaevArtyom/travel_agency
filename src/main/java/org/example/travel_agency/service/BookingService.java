@@ -9,8 +9,13 @@ import java.util.List;
 
 @Service
 public class BookingService {
+
+    private final BookingRepository bookingRepository;
+
     @Autowired
-    private BookingRepository bookingRepository;
+    public BookingService(BookingRepository bookingRepository) {
+        this.bookingRepository = bookingRepository;
+    }
 
     public Booking findById(Long id) {
         return bookingRepository.findById(id).orElse(null);

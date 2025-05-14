@@ -14,24 +14,24 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/login", "/register", "/css/**")) // Игнорирование CSRF на этих путях
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/login", "/register", "/css/**"))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/tours", "/tours/**", "/register", "/css/**", "/images/**", "js/**", "/about").permitAll() // Главная страница доступна всем
-                        .requestMatchers("/admin/**").hasRole("ADMIN") // Только админ доступен к админ-панели
-                        .anyRequest().authenticated() // Все остальные страницы требуют авторизации
+                        .requestMatchers("/", "/tours/**", "/register", "/css/**", "/uploads/**", "/js/**", "/about").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/profile/**").hasRole("USER")
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login") // Страница логина
-                        .defaultSuccessUrl("/", true) // После успешного логина — переходит на главную страницу
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/") // После выхода — перенаправление на главную страницу
+                        .logoutSuccessUrl("/")
                         .permitAll());
 
         return http.build();
     }
-
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {

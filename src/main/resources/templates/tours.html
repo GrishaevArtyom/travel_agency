@@ -1,61 +1,43 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      lang="ru">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Доступные туры</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"/>
 </head>
 <body class="d-flex flex-column min-vh-100">
-
-<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top py-3">
     <div class="container">
         <a class="navbar-brand fw-bold">Туристическое агентство</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <div class="navbar-nav gap-2 align-items-center">
-
                 <a th:href="@{/}" class="btn btn-outline-primary btn-sm">Главная</a>
                 <a th:href="@{/tours}" class="btn btn-primary btn-sm active">Туры</a>
                 <a th:href="@{/about}" class="btn btn-outline-primary btn-sm">Об авторе</a>
-
-                <!-- Profile -->
                 <a th:href="@{/profile}" sec:authorize="hasRole('USER')" class="btn btn-success btn-sm ms-2">
                     <i class="bi bi-person-circle"></i> Личный кабинет
                 </a>
-
-                <!-- Admin -->
                 <a th:href="@{/admin}" sec:authorize="hasRole('ADMIN')" class="btn btn-warning btn-sm text-white ms-2">
                     <i class="bi bi-shield-lock"></i> Админ
                 </a>
-
-                <!-- Auth Buttons -->
                 <a th:href="@{/login}" sec:authorize="isAnonymous()" class="btn btn-outline-secondary btn-sm ms-2">Войти</a>
                 <a th:href="@{/register}" sec:authorize="isAnonymous()" class="btn btn-secondary btn-sm ms-2">Регистрация</a>
-
-                <!-- Logout -->
                 <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" class="ms-2">
                     <button type="submit" class="btn btn-danger btn-sm">
                         <i class="bi bi-box-arrow-right"></i> Выйти
                     </button>
                 </form>
-
             </div>
         </div>
     </div>
 </nav>
-
-<!-- Main Content -->
 <div class="container my-5">
     <h1 class="text-center mb-5">Доступные туры</h1>
-
     <div class="alert alert-info d-flex justify-content-between align-items-center mb-4 px-4 py-3 shadow-sm"
          th:if="${tours != null and not #lists.isEmpty(tours)}">
         <div>
@@ -66,8 +48,6 @@
             <span th:text="'Максимальная цена: ' + ${maxPrice} + ' ₽'">Макс. цена: 0</span>
         </div>
     </div>
-
-    <!-- Search Filters -->
     <div class="card shadow-sm mb-4">
         <div class="card-body">
             <h5 class="card-title mb-4"><i class="bi bi-funnel"></i> Фильтры поиска</h5>
@@ -75,7 +55,7 @@
                 <div class="row g-3">
                     <div class="col-md-4">
                         <label for="country" class="form-label">Страна:</label>
-                        <input type="text" id="country" name="country" placeholder="Например: Россия" class="form-control">
+                        <input type="text" id="country" name="country" placeholder="Например: Россия" class="form-control" maxlength="50"/>
                     </div>
                     <div class="col-md-4">
                         <label for="type" class="form-label">Тип тура:</label>
@@ -100,34 +80,30 @@
                 <div class="row g-3 mt-3">
                     <div class="col-md-6">
                         <label for="startFrom" class="form-label">Дата начала:</label>
-                        <input type="date" id="startFrom" name="startFrom" class="form-control" min="2020-01-01" max="2030-12-31">
+                        <input type="date" id="startFrom" name="startFrom" class="form-control" min="2020-01-01" max="2030-12-31"/>
                     </div>
                     <div class="col-md-6">
                         <label for="startTo" class="form-label">Дата конца:</label>
-                        <input type="date" id="startTo" name="startTo" class="form-control" min="2020-01-01" max="2030-12-31">
+                        <input type="date" id="startTo" name="startTo" class="form-control" min="2020-01-01" max="2030-12-31"/>
                     </div>
                 </div>
                 <div class="row g-3 mt-3">
                     <div class="col-md-6">
                         <label for="priceFrom" class="form-label">Цена от:</label>
-                        <input type="number" id="priceFrom" name="priceFrom" min="0" placeholder="От" class="form-control">
+                        <input type="number" id="priceFrom" name="priceFrom" min="0" placeholder="От" class="form-control" max="10000000"/>
                     </div>
                     <div class="col-md-6">
                         <label for="priceTo" class="form-label">Цена до:</label>
-                        <input type="number" id="priceTo" name="priceTo" min="0" placeholder="До" class="form-control">
+                        <input type="number" id="priceTo" name="priceTo" min="0" placeholder="До" class="form-control" max="10000000"/>
                     </div>
                 </div>
                 <div class="d-flex justify-content-end gap-2 mt-4">
-                    <button type="submit" class="btn btn-primary rounded-pill px-4">
-                        <i class="bi bi-search"></i> Найти туры
-                    </button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4"><i class="bi bi-search"></i> Найти туры</button>
                     <button type="reset" class="btn btn-outline-secondary rounded-pill px-4">Сбросить</button>
                 </div>
             </form>
         </div>
     </div>
-
-    <!-- Tours Table -->
     <div class="table-responsive">
         <table class="table table-hover align-middle">
             <thead class="table-light">
@@ -160,7 +136,6 @@
         </table>
     </div>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

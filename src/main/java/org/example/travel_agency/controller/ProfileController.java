@@ -4,7 +4,6 @@ import org.example.travel_agency.model.Booking;
 import org.example.travel_agency.model.User;
 import org.example.travel_agency.service.BookingService;
 import org.example.travel_agency.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,11 +18,13 @@ import java.util.List;
 @RequestMapping("/profile")
 public class ProfileController {
 
-    @Autowired
-    private BookingService bookingService;
+    private final BookingService bookingService;
+    private final UserService userService;
 
-    @Autowired
-    private UserService userService;
+    public ProfileController(BookingService bookingService, UserService userService) {
+        this.bookingService = bookingService;
+        this.userService = userService;
+    }
 
     @GetMapping
     public String userProfile(Model model, Principal principal) {
