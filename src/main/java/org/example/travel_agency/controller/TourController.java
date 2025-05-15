@@ -93,12 +93,12 @@ public class TourController {
      *
      * @param id    идентификатор тура для отображения
      * @param model объект модели для передачи данных в представление
-     * @return имя шаблона Thymeleaf "tour-details" для отображения детальной информации о туре
+     * @return имя шаблона Thymeleaf "tour_details" для отображения детальной информации о туре
      */
     @GetMapping("/tours/{id}")
     public String tourDetails(@PathVariable Long id, Model model) {
         Tour tour = tourService.findById(id);
         model.addAttribute("tour", tour);
-        return "tour-details";
+        return "tour_details";
     }
 }

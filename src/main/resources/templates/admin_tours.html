@@ -106,8 +106,17 @@
                     <input type="date" name="endDate" th:value="${tour.endDate}" class="form-control" min="2020-01-01" max="2030-12-31" required/>
                 </div>
                 <div class="col-md-8">
-                    <label class="form-label">Изображение (макс. 20 МБ). Поддерживаются только изображения.</label>
-                    <input type="file" name="imageFile" class="form-control" required accept="image/*" id="imageFile"/>
+                    <label class="form-label">Изображение</label>
+                    <input type="file" name="imageFile" class="form-control" th:required="${tour.id == null}" accept="image/*" id="imageFile"/>
+                    <div class="form-text">
+                        <span th:if="${tour.id != null && tour.imagePath != null}">
+                            Текущее изображение: <span th:text="${tour.imagePath != null ? tour.imagePath.substring(tour.imagePath.lastIndexOf('/') + 1) : ''}"></span>
+                            <br>
+                            <small>Загрузите новое изображение только если хотите заменить существующее</small>
+                        </span>
+                        <span th:if="${tour.id == null}">Максимальный размер файла: 20 МБ. Поддерживаются только изображения.</span>
+                    </div>
+                    <input type="hidden" name="currentImagePath" th:if="${tour.id != null}" th:value="${tour.imagePath}" />
                 </div>
                 <div class="col-md-12">
                     <label class="form-label">Описание</label>

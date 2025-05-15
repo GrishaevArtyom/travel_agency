@@ -37,12 +37,12 @@ public class UserAdminController {
      * Загружает список всех пользователей системы для отображения.
      *
      * @param model объект модели для передачи данных в представление
-     * @return имя шаблона Thymeleaf "admin-users" для отображения страницы управления пользователями
+     * @return имя шаблона Thymeleaf "admin_users" для отображения страницы управления пользователями
      */
     @GetMapping
     public String manageUsers(Model model) {
         model.addAttribute("users", userService.findAll());
-        return "admin-users";
+        return "admin_users";
     }
 
     /**
