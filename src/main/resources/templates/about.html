@@ -42,14 +42,12 @@
             <div class="card shadow-sm mb-4">
                 <div class="card-body text-center">
                     <h1 class="card-title mb-4">Об авторе</h1>
-                    <p class="fs-5 text-muted">
-                        Вуз: Финансовый университет при Правительстве РФ<br/>
-                        Курс: 2<br/>
-                        Направление: Программная инженерия<br/>
-                        Группа: ТРПО23-4<br/>
-                        Студент: Гришаев Артём Сергеевич<br/>
-                        Курсовая работа на тему: "Информационно-справочная система туристического агентства".
-                    </p>
+                    <div id="authorInfo" class="fs-5 text-muted">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Загрузка...</span>
+                        </div>
+                        <p>Загрузка информации...</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -63,5 +61,40 @@
     </div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('/api/author-info')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка при загрузке данных');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const authorInfoDiv = document.getElementById('authorInfo');
+                authorInfoDiv.innerHTML = `
+                    <p>
+                        Вуз: ${data.university}<br/>
+                        Курс: ${data.course}<br/>
+                        Направление: ${data.specialization}<br/>
+                        Группа: ${data.group}<br/>
+                        Студент: ${data.student}<br/>
+                        Курсовая работа на тему: "${data.theme}".
+                    </p>
+                `;
+            })
+            .catch(error => {
+                console.error('Произошла ошибка:', error);
+                const authorInfoDiv = document.getElementById('authorInfo');
+                authorInfoDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        Не удалось загрузить информацию об авторе.
+                        Пожалуйста, попробуйте обновить страницу.
+                    </div>
+                `;
+            });
+    });
+</script>
 </body>
 </html>
