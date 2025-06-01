@@ -7,13 +7,12 @@ import org.example.travel_agency.service.BookingService;
 import org.example.travel_agency.service.TourService;
 import org.example.travel_agency.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 
 /**
@@ -44,8 +43,8 @@ public class BookingController {
      * Создает новый экземпляр контроллера бронирования с необходимыми сервисами.
      *
      * @param bookingService сервис для управления бронированиями
-     * @param tourService сервис для получения информации о турах
-     * @param userService сервис для получения информации о пользователях
+     * @param tourService    сервис для получения информации о турах
+     * @param userService    сервис для получения информации о пользователях
      */
     @Autowired
     public BookingController(BookingService bookingService, TourService tourService, UserService userService) {
@@ -59,14 +58,13 @@ public class BookingController {
      * Создает новую запись о бронировании, связывая текущего аутентифицированного
      * пользователя с выбранным туром, и сохраняет информацию в базе данных.
      *
-     * @param tourId идентификатор тура для бронирования
-     * @param currentUser данные текущего аутентифицированного пользователя
+     * @param tourId    идентификатор тура для бронирования
+     * @param principal объект, содержащий информацию о текущем аутентифицированном пользователе
      * @return перенаправление на страницу профиля пользователя после успешного бронирования
      */
     @PostMapping("/{tourId}")
-    public String bookTour(@PathVariable Long tourId,
-                           @AuthenticationPrincipal UserDetails currentUser) {
-        User user = userService.findUserByUsername(currentUser.getUsername());
+    public String bookTour(@PathVariable Long tourId, Principal principal) {
+        User user = userService.findUserByUsername(principal.getName());
         Tour tour = tourService.findById(tourId);
 
         Booking booking = Booking.builder()

@@ -81,7 +81,7 @@ public class TourAdminController {
                 if (Files.exists(fileToDelete)) {
                     Files.delete(fileToDelete);
                 }
-            } catch (IOException e) {
+            } catch (IOException ignored) {
             }
         }
 
@@ -135,7 +135,7 @@ public class TourAdminController {
                 if (Files.exists(oldFile)) {
                     Files.delete(oldFile);
                 }
-            } catch (IOException e) {
+            } catch (IOException ignored) {
             }
         }
 
