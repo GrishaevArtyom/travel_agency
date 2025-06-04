@@ -80,21 +80,21 @@
                 <div class="row g-3 mt-3">
                     <div class="col-md-6">
                         <label for="startFrom" class="form-label">Дата начала:</label>
-                        <input type="date" id="startFrom" name="startFrom" class="form-control" min="2020-01-01" max="2030-12-31"/>
+                        <input type="date" id="startFrom" name="startFrom" class="form-control"/>
                     </div>
                     <div class="col-md-6">
                         <label for="startTo" class="form-label">Дата конца:</label>
-                        <input type="date" id="startTo" name="startTo" class="form-control" min="2020-01-01" max="2030-12-31"/>
+                        <input type="date" id="startTo" name="startTo" class="form-control"/>
                     </div>
                 </div>
                 <div class="row g-3 mt-3">
                     <div class="col-md-6">
                         <label for="priceFrom" class="form-label">Цена от:</label>
-                        <input type="number" id="priceFrom" name="priceFrom" min="0" placeholder="От" class="form-control" max="10000000" step="0.01"/>
+                        <input type="number" id="priceFrom" name="priceFrom" placeholder="От" class="form-control" step="0.01"/>
                     </div>
                     <div class="col-md-6">
                         <label for="priceTo" class="form-label">Цена до:</label>
-                        <input type="number" id="priceTo" name="priceTo" min="0" placeholder="До" class="form-control" max="10000000" step="0.01"/>
+                        <input type="number" id="priceTo" name="priceTo" placeholder="До" class="form-control" step="0.01"/>
                     </div>
                 </div>
                 <div class="d-flex justify-content-end gap-2 mt-4">
@@ -144,5 +144,152 @@
     </div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const priceFromInput = document.getElementById('priceFrom');
+        const priceToInput = document.getElementById('priceTo');
+        const startFromInput = document.getElementById('startFrom');
+        const startToInput = document.getElementById('startTo');
+        const countryInput = document.getElementById('country');
+
+        // Функция для вывода ошибок
+        function showError(input, message) {
+            let errorDiv = input.parentElement.querySelector('.error-message');
+            if (!errorDiv) {
+                errorDiv = document.createElement('div');
+                errorDiv.className = 'text-danger error-message small';
+                input.parentElement.appendChild(errorDiv);
+            }
+            errorDiv.textContent = message;
+        }
+
+        // Очистка ошибок
+        function clearError(input) {
+            const errorDiv = input.parentElement.querySelector('.error-message');
+            if (errorDiv) errorDiv.textContent = '';
+        }
+
+        // Проверка цен
+        function validatePrices() {
+            const priceFrom = parseFloat(priceFromInput.value);
+            const priceTo = parseFloat(priceToInput.value);
+
+            clearError(priceFromInput);
+            clearError(priceToInput);
+
+            if (priceFromInput.value !== '') {
+                if (isNaN(priceFrom) || priceFrom < 0 || priceFrom > 10_000_000) {
+                    showError(priceFromInput, 'Цена "от" должна быть от 0 до 10000000.');
+                    return false;
+                }
+
+                const decimalCheck = /^[0-9]+(\.[0-9]{1,2})?$/;
+                if (!decimalCheck.test(priceFrom.toString())) {
+                    showError(priceFromInput, 'Максимум два знака после запятой.');
+                    return false;
+                }
+            }
+
+            if (priceToInput.value !== '') {
+                if (isNaN(priceTo) || priceTo < 0 || priceTo > 10_000_000) {
+                    showError(priceToInput, 'Цена "до" должна быть от 0 до 10000000.');
+                    return false;
+                }
+
+                const decimalCheck = /^[0-9]+(\.[0-9]{1,2})?$/;
+                if (!decimalCheck.test(priceTo.toString())) {
+                    showError(priceToInput, 'Максимум два знака после запятой.');
+                    return false;
+                }
+            }
+
+            if (priceFromInput.value !== '' && priceToInput.value !== '' && priceFrom > priceTo) {
+                showError(priceToInput, 'Цена "до" должна быть больше или равна цене "от".');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Проверка дат
+        function validateDates() {
+            const startFrom = startFromInput.value;
+            const startTo = startToInput.value;
+
+            clearError(startFromInput);
+            clearError(startToInput);
+
+            if (startFrom) {
+                const dateFrom = new Date(startFrom);
+                if (dateFrom.getFullYear() < 2020 || dateFrom.getFullYear() > 2030) {
+                    showError(startFromInput, 'Год должен быть между 2020 и 2030.');
+                    return false;
+                }
+            }
+
+            if (startTo) {
+                const dateTo = new Date(startTo);
+                if (dateTo.getFullYear() < 2020 || dateTo.getFullYear() > 2030) {
+                    showError(startToInput, 'Год должен быть между 2020 и 2030.');
+                    return false;
+                }
+            }
+
+            if (startFrom && startTo) {
+                const dateFrom = new Date(startFrom);
+                const dateTo = new Date(startTo);
+                if (dateFrom > dateTo) {
+                    showError(startToInput, 'Дата конца должна быть позже даты начала.');
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // Проверка страны — только буквы и пробелы
+        function validateCountry() {
+            const country = countryInput.value.trim();
+            clearError(countryInput);
+
+            if (country === '') return true;
+
+            const regex = /^[a-zA-Zа-яА-ЯёЁ\s\-]+$/u;
+            if (!regex.test(country)) {
+                showError(countryInput, 'Страна должна содержать только буквы, пробелы и дефис.');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Обработчики событий
+        function addValidationListeners() {
+            [priceFromInput, priceToInput, startFromInput, startToInput, countryInput].forEach(input => {
+                if (input) {
+                    input.addEventListener('input', () => {
+                        validatePrices();
+                        validateDates();
+                        validateCountry();
+                    });
+                }
+            });
+
+            // Перед отправкой формы
+            document.querySelector('form').addEventListener('submit', function (e) {
+                const validPrice = validatePrices();
+                const validDate = validateDates();
+                const validCountry = validateCountry();
+
+                if (!(validPrice && validDate && validCountry)) {
+                    e.preventDefault();
+                    alert('Исправьте ошибки в форме перед отправкой.');
+                }
+            });
+        }
+
+        addValidationListeners();
+    });
+</script>
 </body>
 </html>

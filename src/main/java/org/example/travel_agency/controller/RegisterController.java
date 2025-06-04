@@ -1,8 +1,8 @@
 package org.example.travel_agency.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.example.travel_agency.model.User;
 import org.example.travel_agency.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
  * Выполняет хеширование паролей и установку роли пользователя по умолчанию.
  */
 @Controller
-@RequiredArgsConstructor
 public class RegisterController {
 
     /**
@@ -29,6 +28,18 @@ public class RegisterController {
      * Кодировщик паролей для безопасного хранения паролей в базе данных.
      */
     private final BCryptPasswordEncoder passwordEncoder;
+
+    /**
+     * Конструктор для внедрения зависимостей сервиса пользователей и кодировщика паролей.
+     *
+     * @param userService сервис для работы с пользовательскими данными
+     * @param passwordEncoder кодировщик паролей для безопасного хранения паролей
+     */
+    @Autowired
+    public RegisterController(UserService userService, BCryptPasswordEncoder passwordEncoder) {
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     /**
      * Обрабатывает GET-запрос на страницу регистрации.

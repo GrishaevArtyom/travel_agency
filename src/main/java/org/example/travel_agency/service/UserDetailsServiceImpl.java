@@ -1,6 +1,5 @@
 package org.example.travel_agency.service;
 
-import lombok.RequiredArgsConstructor;
 import org.example.travel_agency.model.User;
 import org.example.travel_agency.repository.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,13 +16,21 @@ import java.util.List;
  * и преобразования их в формат, понятный Spring Security.
  */
 @Service
-@RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     /**
      * Репозиторий для доступа к данным пользователей.
      */
     private final UserRepository userRepository;
+
+    /**
+     * Создает новый экземпляр сервиса аутентификации с указанным репозиторием пользователей.
+     *
+     * @param userRepository репозиторий для доступа к данным пользователей
+     */
+    public UserDetailsServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     /**
      * Загружает пользовательские данные по имени пользователя.

@@ -4,6 +4,7 @@ import org.example.travel_agency.model.Booking;
 import org.example.travel_agency.model.User;
 import org.example.travel_agency.service.BookingService;
 import org.example.travel_agency.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +42,7 @@ public class ProfileController {
      * @param bookingService сервис для управления бронированиями пользователя
      * @param userService сервис для получения информации о пользователе
      */
+    @Autowired
     public ProfileController(BookingService bookingService, UserService userService) {
         this.bookingService = bookingService;
         this.userService = userService;

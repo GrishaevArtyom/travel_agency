@@ -88,6 +88,7 @@
                 <div class="col-md-4">
                     <label class="form-label">Тип</label>
                     <select name="type" class="form-select" required>
+                        <option value="">Выберите тип</option>
                         <option value="пляжный" th:selected="${tour.type == 'пляжный'}">Пляжный</option>
                         <option value="экскурсионный" th:selected="${tour.type == 'экскурсионный'}">Экскурсионный</option>
                         <option value="приключенческий" th:selected="${tour.type == 'приключенческий'}">Приключенческий</option>
@@ -95,19 +96,20 @@
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Цена</label>
-                    <input type="number" name="price" th:value="${tour.price}" class="form-control" required min="0" max="10000000" step="0.01" placeholder="0.00"/>
+                    <input type="number" name="price" th:value="${tour.price}" class="form-control" required step="0.01" placeholder="0.00"/>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Дата начала</label>
-                    <input type="date" name="startDate" th:value="${tour.startDate}" class="form-control" min="2020-01-01" max="2030-12-31" required/>
+                    <input type="date" name="startDate" th:value="${tour.startDate}" class="form-control" required/>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Дата окончания</label>
-                    <input type="date" name="endDate" th:value="${tour.endDate}" class="form-control" min="2020-01-01" max="2030-12-31" required/>
+                    <input type="date" name="endDate" th:value="${tour.endDate}" class="form-control" required/>
                 </div>
                 <div class="col-md-8">
                     <label class="form-label">Изображение</label>
-                    <input type="file" name="imageFile" class="form-control" th:required="${tour.id == null}" accept="image/*" id="imageFile"/>
+                    <input type="file" name="imageFile" class="form-control" accept="image/*" id="imageFile"
+                           th:required="${tour.id == null}"/>
                     <div class="form-text">
                         <span th:if="${tour.id != null && tour.imagePath != null}">
                             Текущее изображение: <span th:text="${tour.imagePath != null ? tour.imagePath.substring(tour.imagePath.lastIndexOf('/') + 1) : ''}"></span>
@@ -141,29 +143,138 @@
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const fileInput = document.getElementById('imageFile');
-    const MAX_FILE_SIZE = 20 * 1024 * 1024;
+    document.addEventListener('DOMContentLoaded', function () {
+        const priceInput = document.querySelector('[name="price"]');
+        const startDateInput = document.querySelector('[name="startDate"]');
+        const endDateInput = document.querySelector('[name="endDate"]');
+        const countryInput = document.querySelector('[name="country"]');
+        const descriptionInput = document.querySelector('[name="description"]');
+        const imageInput = document.getElementById('imageFile');
+        const form = document.getElementById('tourForm');
 
-    fileInput.addEventListener('change', function() {
-        if (this.files.length > 0) {
-            const fileSize = this.files[0].size;
+        const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 MB
 
-            if (fileSize > MAX_FILE_SIZE) {
-                alert('Размер файла превышает 20 МБ. Пожалуйста, выберите файл меньшего размера.');
-                this.value = '';
+        function showError(input, message) {
+            let errorDiv = input.parentElement.querySelector('.error-message');
+            if (!errorDiv) {
+                errorDiv = document.createElement('div');
+                errorDiv.className = 'text-danger small error-message mt-1';
+                input.parentElement.appendChild(errorDiv);
             }
+            errorDiv.textContent = message;
         }
-    });
 
-    const form = document.getElementById('tourForm');
-    form.addEventListener('submit', function(e) {
-        if (fileInput.files.length > 0 && fileInput.files[0].size > MAX_FILE_SIZE) {
-            e.preventDefault();
-            alert('Размер файла превышает 20 МБ. Пожалуйста, выберите файл меньшего размера.');
+        function clearError(input) {
+            const errorDiv = input.parentElement.querySelector('.error-message');
+            if (errorDiv) errorDiv.textContent = '';
         }
+
+        function validatePrice() {
+            clearError(priceInput);
+            const value = priceInput.value.trim();
+            if (!value) return true;
+
+            const numValue = parseFloat(value);
+
+            if (isNaN(numValue) || numValue < 0 || numValue > 10_000_000) {
+                showError(priceInput, 'Цена должна быть от 0 до 10000000.');
+                return false;
+            }
+
+            const decimalRegex = /^[0-9]+(\.[0-9]{1,2})?$/;
+            if (!decimalRegex.test(value)) {
+                showError(priceInput, 'Максимум два знака после запятой.');
+                return false;
+            }
+
+            return true;
+        }
+
+        function validateDates() {
+            clearError(startDateInput);
+            clearError(endDateInput);
+
+            const start = startDateInput.value;
+            const end = endDateInput.value;
+
+            if (start) {
+                const dateStart = new Date(start);
+                if (dateStart.getFullYear() < 2020 || dateStart.getFullYear() > 2030) {
+                    showError(startDateInput, 'Год должен быть между 2020 и 2030.');
+                    return false;
+                }
+            }
+
+            if (end) {
+                const dateEnd = new Date(end);
+                if (dateEnd.getFullYear() < 2020 || dateEnd.getFullYear() > 2030) {
+                    showError(endDateInput, 'Год должен быть между 2020 и 2030.');
+                    return false;
+                }
+            }
+
+            if (start && end) {
+                const dateStart = new Date(start);
+                const dateEnd = new Date(end);
+                if (dateStart > dateEnd) {
+                    showError(endDateInput, 'Дата окончания должна быть позже даты начала.');
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        function validateCountry() {
+            clearError(countryInput);
+            const country = countryInput.value.trim();
+
+            if (!country) return true;
+
+            const regex = /^[a-zA-Zа-яА-ЯёЁ\s\-]+$/u;
+            if (!regex.test(country)) {
+                showError(countryInput, 'Поле "Страна" должно содержать только буквы, пробелы и дефис.');
+                return false;
+            }
+
+            return true;
+        }
+
+        function validateImageSize() {
+            if (imageInput.files.length === 0) return true;
+
+            const file = imageInput.files[0];
+            if (file.size > MAX_FILE_SIZE) {
+                alert('Размер файла превышает 20 МБ. Пожалуйста, выберите файл меньшего размера.');
+                imageInput.value = '';
+                return false;
+            }
+
+            return true;
+        }
+
+        [priceInput, startDateInput, endDateInput, countryInput].forEach(input => {
+            if (input) {
+                input.addEventListener('input', () => {
+                    validatePrice();
+                    validateDates();
+                    validateCountry();
+                });
+            }
+        });
+
+        form.addEventListener('submit', function (e) {
+            const validPrice = validatePrice();
+            const validDates = validateDates();
+            const validCountry = validateCountry();
+            const validImage = validateImageSize();
+
+            if (!(validPrice && validDates && validCountry && validImage)) {
+                e.preventDefault();
+                alert('Исправьте ошибки в форме перед отправкой.');
+            }
+        });
     });
-});
 </script>
 </body>
 </html>
