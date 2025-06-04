@@ -56,13 +56,21 @@ public class RegisterController {
 
     /**
      * Обрабатывает POST-запрос на регистрацию пользователя.
+     * Проверяет существование пользователя с таким же именем.
      * Кодирует пароль пользователя, устанавливает роль "USER" и сохраняет данные в базе.
      *
      * @param user объект пользователя с данными из формы регистрации
-     * @return перенаправление на страницу входа после успешной регистрации
+     * @param model объект модели для передачи данных в представление
+     * @return перенаправление на страницу входа после успешной регистрации или
+     *         возврат на страницу регистрации с сообщением об ошибке
      */
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute User user) {
+    public String registerUser(@ModelAttribute User user, Model model) {
+        if (userService.findUserByUsername(user.getUsername()) != null) {
+            model.addAttribute("error", "Пользователь с таким именем уже существует");
+            return "register";
+        }
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole("USER");
         userService.save(user);
